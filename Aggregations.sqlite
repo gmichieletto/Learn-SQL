@@ -1,0 +1,65 @@
+// count total rows in a table
+SELECT COUNT(*) 
+FROM fake_apps;
+
+//sum values in a column
+SELECT SUM(downloads)
+FROM fake_apps;
+
+//minimum, maximum or average value in a column
+SELECT MIN(downloads)
+FROM fake_apps;
+
+SELECT MAX(price)
+FROM fake_apps;
+
+SELECT AVG(downloads)
+FROM fake_apps;
+
+//ROUND function
+SELECT name, ROUND(price, 0)
+FROM fake_apps;
+
+SELECT ROUND( AVG(price) , 2)
+FROM fake_apps;
+
+//GROUP BY
+SELECT price, COUNT(*) 
+FROM fake_apps
+GROUP BY price;
+
+SELECT price, COUNT(*) 
+FROM fake_apps
+WHERE SUM(downloads) > 20000
+GROUP BY price;
+
+SELECT category, SUM(downloads) 
+FROM fake_apps
+GROUP BY category;
+
+SELECT ROUND(imdb_rating),
+   COUNT(name)
+FROM movies
+GROUP BY ROUND(imdb_rating)
+ORDER BY ROUND(imdb_rating);
+
+//can be written with column reference
+SELECT ROUND(imdb_rating),
+   COUNT(name)
+FROM movies
+GROUP BY 1
+ORDER BY 1;
+
+SELECT category, 
+   price,
+   AVG(downloads)
+FROM fake_apps
+GROUP BY 1, 2;
+
+//HAVING clause to filter groups, WHERE filters rows
+SELECT price, 
+   ROUND(AVG(downloads)),
+   COUNT(*)
+FROM fake_apps
+GROUP BY price
+HAVING COUNT(*) > 10;
