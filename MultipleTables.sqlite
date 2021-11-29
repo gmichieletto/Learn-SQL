@@ -1,0 +1,88 @@
+//three different tables
+SELECT *
+FROM orders
+LIMIT 5;
+ 
+SELECT *
+FROM subscriptions
+LIMIT 5;
+ 
+SELECT * 
+FROM customers
+LIMIT 5;
+
+//join orders and subscriptions tables
+SELECT *
+FROM orders
+JOIN subscriptions
+  ON orders.subscription_id = subscriptions.subscription_id;
+
+//add a where condition
+SELECT *
+FROM orders
+JOIN subscriptions
+  ON orders.subscription_id = subscriptions.subscription_id
+WHERE subscriptions.description = 'Fashion Magazine';
+
+//Inner join keeps only matching rows
+select count(*) from newspaper;
+select count(*) from online;
+select count(*)
+from newspaper
+  inner join online
+  on newspaper.id = online.id;
+
+//left join keeps all rows from first table + matching from second
+select *
+from newspaper
+  left join online
+  on newspaper.id = online.id;
+
+select *
+from newspaper
+  left join online
+  on newspaper.id = online.id
+where online.id IS NULL;
+
+// count how many newspaper subscribers in month 3
+select count(*)
+from newspaper
+where start_month <=3 AND end_month>=3;
+
+//cross join both tables (no need for keys)
+select *
+from newspaper
+  cross join months;
+
+//add where clause
+select *
+from newspaper
+  cross join months
+where start_month <= month
+  AND end_month >= month;
+
+//add group_by clause, count how many subscribers for each month
+select month, count(*)
+from months
+  cross join newspaper
+where start_month <= month
+  and end_month >= month
+group by month;
+
+
+//UNION stacks tables with same columns structure (exclude duplicates rows)
+select * from newspaper
+union
+select * from online;
+
+//WITH stores temp table for following joins
+WITH previous_query AS (
+  SELECT customer_id, COUNT(subscription_id) AS 'subscriptions'
+  FROM orders
+  GROUP BY customer_id
+)
+SELECT customers.customer_name,
+  previous_query.subscriptions
+FROM previous_query
+JOIN customers
+  ON previous_query.customer_id = customers.customer_id;
